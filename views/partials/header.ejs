@@ -1,0 +1,23 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Guide</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<nav>
+    <h1><a href="/">My Guide</a></h1>
+    <ul>
+        <% if (user){ %>
+            <li><a href="/hiking">Hiking</a></li>
+            <li><a href="/hotel" class="btn">Hotel</a></li>
+            <li><a href="/monument">Monument</a></li>
+            <li><a href="/museum" class="btn">Museum</a></li>
+            <li><a href="/logout" class="btn-red">Logout</a></li>
+        <% } else { %>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/register" class="btn">Register</a></li>
+        <% } %>
+    </ul>
+</nav>

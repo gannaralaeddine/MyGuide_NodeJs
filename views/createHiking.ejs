@@ -1,0 +1,53 @@
+<%- include('partials/header') -%>
+
+
+    <form>
+        <h1> Create Haking </h1>
+        <label for="name">Name</label>
+        <input type="text" name="name" required>
+
+        <label for="title">Title</label>
+        <input type="text" name="title" required>
+
+        <label for="program">Program</label>
+        <input type="text" name="program" required>
+
+        <label for="organizer">Organizer</label>
+        <input type="text" name="organizer" required>
+
+        <label for="governorate">Governorate</label>
+        <input type="text" name="governorate" required>
+
+        <button >Create</button>
+
+    </form>
+
+    <script>
+        const form = document.querySelector('form')
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            //Get values
+            const name = form.name.value;
+            const title = form.title.value;
+            const program = form.program.value;
+            const organizer = form.organizer.value;
+            const governorate = form.governorate.value;
+
+            try
+            {
+                const res = await fetch('/hiking/add', {
+                    method: 'POST',
+                    body: JSON.stringify({name, title, program, organizer, governorate}),
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                console.log("Successfully added a new hiking")
+            }
+            catch (err)
+            {
+                console.log(err)
+            }
+        })
+    </script>
+<%- include('partials/footer') -%>
