@@ -20,7 +20,8 @@ const hikingSchema = new Schema({
         required: true
     },
     participants:{
-        type: [userSchema],
+        type: Schema.Types.ObjectId,//[userSchema]
+        ref:'participants',
         required: true
     }
 })

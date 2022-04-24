@@ -49,6 +49,14 @@ userSchema.statics.login = async function (email, password)
     throw Error('incorrect email')
 }
 
+userSchema.virtual('hikingsCreated',{ 
+    ref: 'Hiking', 
+    localField: '_id',
+    foreignField: 'participants', 
+})
+
+userSchema.set('toObject', { virtuals: true })
+userSchema.set('toJSON', { virtuals: true })
 
 const User =  mongoose.model('user', userSchema)
 
