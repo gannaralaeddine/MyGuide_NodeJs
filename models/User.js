@@ -13,7 +13,8 @@ const userSchema = new Schema({
     lastName:{ type: String, required: true },
     birthDate:{ type: Date, required: true },
     country:{ type: String, required: true },
-    password:{ type: String, required: [true, 'Please enter a password'], minlength: [6, 'Minimum password length is 6 characters'] }
+    password:{ type: String, required: [true, 'Please enter a password'], minlength: [6, 'Minimum password length is 6 characters'] },
+    hikings:[{ type: Schema.Types.ObjectId, ref: 'Hiking' }]
 })
 
 // Fire a function after doc saved to db
@@ -49,11 +50,11 @@ userSchema.statics.login = async function (email, password)
     throw Error('incorrect email')
 }
 
-userSchema.virtual('hikingsCreated',{ 
+/* userSchema.virtual('hikingsCreated',{ 
     ref: 'Hiking', 
     localField: '_id',
     foreignField: 'participants', 
-})
+}) */
 
 userSchema.set('toObject', { virtuals: true })
 userSchema.set('toJSON', { virtuals: true })

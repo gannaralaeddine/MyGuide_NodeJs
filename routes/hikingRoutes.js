@@ -1,18 +1,28 @@
-const express = require('express');
-const router = express.Router();
-const HikingRoutes = require('../models/Hiking');
+const express = require('express')
+const router = express.Router()
+const HikingRoutes = require('../models/Hiking')
 const hikingController = require("../controllers/hikingController")
-
+const jwt_decode = require('jwt-decode')
+const user = require("../models/User")
 
     router.post('/add', async function (req, res) {
         try {
+            const decodedToken = jwt_decode(req.cookies.jwt)
             const hiking = await new HikingRoutes({
                 name: req.body.name,
                 title: req.body.title,
                 program: req.body.program,
                 organizer: req.body.organizer,
-                participants: req.body.participants
+                user: decodedToken.id
+                //participants: req.body.participants
             }).save()
+            user.findById(decodedToken.id, function(err, user) {
+                if(user)
+                {
+                    user.hikings.push(hiking._id)
+                    user.save()
+                }
+            })
             res.status(201)
             res.send(hiking)
             console.log("the HikingRoutes is added successfully with status code: " + res.status())
@@ -24,7 +34,7 @@ const hikingController = require("../controllers/hikingController")
 
 
     router.get("/list",function(req,res){
-        HikingRoutes.find(function(err, docs){
+        HikingRoutes.find({user:req.query.user},function(err,docs){
             if (err)
             {
                 console.log(err)
@@ -34,6 +44,7 @@ const hikingController = require("../controllers/hikingController")
                 console.log(docs)
                 res.send(docs)
             }
+            
         })
     })
 
