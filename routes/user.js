@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const user = require('../models/User');
-
+const HikingRoutes = require('../models/Hiking')
 
     router.post('/add', async function(req, res) {
         try {
@@ -76,5 +76,22 @@ const user = require('../models/User');
         })
     })
 
+    /* I changed the router here to let the route "/user/hiking/" working well, 
+    so please don't change it to another place*/
+
+    router.get("/hiking",function(req,res){
+        HikingRoutes.find({userId:req.query.userId},function(err,docs){
+            if (err)
+            {
+                console.log(err)
+            }
+            else
+            {
+                console.log(docs)
+                res.send(docs)
+            }
+            
+        })
+    })
 
 module.exports = router

@@ -13,7 +13,7 @@ const user = require("../models/User")
                 title: req.body.title,
                 program: req.body.program,
                 organizer: req.body.organizer,
-                user: decodedToken.id
+                userId: decodedToken.id
                 //participants: req.body.participants
             }).save()
             user.findById(decodedToken.id, function(err, user) {
@@ -33,8 +33,8 @@ const user = require("../models/User")
     })
 
 
-    router.get("/list",function(req,res){
-        HikingRoutes.find({user:req.query.user},function(err,docs){
+    /*router.get("/user/hiking",function(req,res){
+        HikingRoutes.find({userId:req.query.userId},function(err,docs){
             if (err)
             {
                 console.log(err)
@@ -46,7 +46,7 @@ const user = require("../models/User")
             }
             
         })
-    })
+    })*/
 
 
     router.delete("/delete/:id",async function (req, res) {
