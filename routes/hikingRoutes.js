@@ -33,22 +33,6 @@ const user = require("../models/User")
     })
 
 
-    /*router.get("/user/hiking",function(req,res){
-        HikingRoutes.find({userId:req.query.userId},function(err,docs){
-            if (err)
-            {
-                console.log(err)
-            }
-            else
-            {
-                console.log(docs)
-                res.send(docs)
-            }
-            
-        })
-    })*/
-
-
     router.delete("/delete/:id",async function (req, res) {
 
         try {
@@ -83,6 +67,36 @@ const user = require("../models/User")
 
 
     router.get('/', hikingController.hiking_view)
+
+
+    // add the id of participants to hiking
+    router.put('/participate', async function (req, res) {
+        try {
+            const decodedToken = jwt_decode(req.cookies.jwt)
+            HikingRoutes.findById(req.query.hikingId,function (err, hiking){
+                if (hiking)
+                {
+                    const idOccurrence = hiking.participants.filter((v) => (v == decodedToken.id)).length
+                    if (idOccurrence >= 1)
+                    {
+                        console.log('idOccurrence: '+idOccurrence)
+                        res.status(400).json({"message":"the id is already exists"})
+                        //res.send()
+                    }
+                    else
+                    {
+                        console.log('idOccurrence: ' + idOccurrence)
+                        hiking.participants.push(decodedToken.id)
+                        hiking.save()
+                        res.send(hiking)
+                    }
+                }
+            })
+        } catch (err) {
+            console.log(err)
+            res.send(err.status)
+        }
+    })
 
 
 module.exports = router

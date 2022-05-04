@@ -21,12 +21,8 @@ const hikingSchema = new Schema({
     },
     userId : {
         type: String
-    }
-    /*participants:{
-        type: Schema.Types.ObjectId,//[userSchema]
-        ref:'participants',
-        required: true
-    }*/
+    },
+    participants:[{ type: Schema.Types.ObjectId, ref:'User' }]
 })
 
 const Hiking =  mongoose.model('hiking', hikingSchema)
