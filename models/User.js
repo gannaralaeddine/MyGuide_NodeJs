@@ -14,6 +14,7 @@ const userSchema = new Schema({
     birthDate:{ type: Date, required: true },
     country:{ type: String, required: true },
     password:{ type: String, required: [true, 'Please enter a password'], minlength: [6, 'Minimum password length is 6 characters'] },
+    profileImage:{ type: String, required: true },
     hikings:[{ type: Schema.Types.ObjectId, ref: 'Hiking' }]
 })
 

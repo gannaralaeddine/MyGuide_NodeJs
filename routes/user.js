@@ -2,8 +2,40 @@ const express = require('express');
 const router = express.Router();
 const user = require('../models/User');
 const HikingRoutes = require('../models/Hiking')
+const multer = require('multer');
 
-    router.post('/add', async function(req, res) {
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) 
+    {
+        cb(null, './uploads');
+    },
+    filename: function(req, file, cb) 
+    {
+        cb(null, new Date().toISOString().replace(/:/g, '-') + file.originalname);
+    }
+});
+
+const fileFilter = (req, file, cb) => {
+  // reject a file
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') 
+    {
+        cb(null, true);
+    } 
+    else 
+    {
+        cb(null, false);
+    }
+};
+
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 1024 * 1024 * 5
+    },
+    fileFilter: fileFilter
+});
+
+    router.post('/add',upload.single('profileImage'),async function(req, res) {
         try {
             const u = await new user({
                 firstName: req.body.firstName,
@@ -11,7 +43,8 @@ const HikingRoutes = require('../models/Hiking')
                 email: req.body.email,
                 birthDate: (new Date(req.body.birthDate).getMonth() + 1) + "-" + new Date(req.body.birthDate).getDate() + "-" + (new Date(req.body.birthDate).getFullYear()),
                 country: req.body.country,
-                password: req.body.password
+                password: req.body.password,
+                profileImage: req.file.path
             }).save()
             res.status(201)
             res.send(u)
@@ -19,7 +52,8 @@ const HikingRoutes = require('../models/Hiking')
         catch (err)
         {
             res.status(400)
-            res.send("error: user cannot be added !!!")
+            //res.send("error: user cannot be added !!!")
+            res.send({error: err})
         }
 
     })
@@ -41,7 +75,7 @@ const HikingRoutes = require('../models/Hiking')
 
 
     router.delete("/delete/:id",function(req,res){
-       user.remove({_id:req.params.id},function(err){
+        user.remove({_id:req.params.id},function(err){
             if (err)
             {
                 console.log(err)
